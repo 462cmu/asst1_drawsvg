@@ -1,0 +1,16 @@
+<svg width="200" height="200" viewBox="0 0 400 400"
+  xmlns="http://www.w3.org/2000/svg" 
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  version="1.1">
+  
+  <desc>Example rect01 - rectangle with sharp corners</desc>
+
+  <rect x="50" y="50" height="100" width="100"
+        fill="#00BFFF" stroke="#666666" stroke-width="10" />
+
+  <g transform="translate(30 20) rotate(15 50 50) scale(2 1) skewX(5)">
+    <rect x="50" y="50" height="100" width="100"
+          fill="#FF4000" fill-opacity="0.5" stroke="#666666" stroke-width="10"/>
+  </g>
+
+</svg>
