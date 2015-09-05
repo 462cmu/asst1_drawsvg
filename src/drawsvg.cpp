@@ -116,8 +116,8 @@ void DrawSVG::resize( size_t width, size_t height ) {
 
   // re-adjust norm_to_screen
   float scale = min(width, height);
-  norm_to_screen(0,0) =  scale; norm_to_screen(0,2) = (width  - scale) / 2;
-  norm_to_screen(1,1) = -scale; norm_to_screen(1,2) = (height + scale) / 2;
+  norm_to_screen(0,0) = scale; norm_to_screen(0,2) = (width  - scale) / 2;
+  norm_to_screen(1,1) = scale; norm_to_screen(1,2) = (height - scale) / 2;
 
   // redraw current tab with updated transformation
   redraw();
@@ -370,7 +370,7 @@ void DrawSVG::draw_zoom() {
   // grab pixels from the region of interest
   vector<unsigned char> windowPixels( 3*regionSize*regionSize );
   glReadPixels( cX - regionSize/2,
-                cY - regionSize/2,
+                cY - regionSize/2 + 1, // meh
                 regionSize,
                 regionSize,
                 GL_RGB,
@@ -483,6 +483,8 @@ void DrawSVG::auto_adjust(size_t tab_index) {
 
 void DrawSVG::display_pixels( const unsigned char* pixels ) const {
 
+  // flip
+
   // copy pixels to the screen
   glPushAttrib( GL_VIEWPORT_BIT );
   glViewport(0, 0, width, height);
@@ -490,15 +492,17 @@ void DrawSVG::display_pixels( const unsigned char* pixels ) const {
   glMatrixMode( GL_PROJECTION );
   glPushMatrix();
   glLoadIdentity();
-  glOrtho( 0, width, 0, height, .01, 100. );
+  glOrtho( 0, width, 0, height, 0, 0 );
 
   glMatrixMode( GL_MODELVIEW );
   glPushMatrix();
   glLoadIdentity();
-  glTranslatef( 0., 0., -1. );
+  glTranslatef( -1, 1, 0 );
 
-  glRasterPos2i( 0, 0 );
+  glRasterPos2f(0, 0);
+  glPixelZoom( 1.0, -1.0 );
   glDrawPixels( width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels );
+  glPixelZoom( 1.0, 1.0 );
 
   glPopAttrib();
   glMatrixMode( GL_PROJECTION ); glPopMatrix();
