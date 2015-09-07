@@ -150,10 +150,15 @@ void SVGParser::parseElement( XMLElement* xml, SVGElement* element ) {
   if( fill_opacity ) style->fillColor.a = atof( fill_opacity );
 
   const char* stroke = xml->Attribute( "stroke" );
-  if( stroke ) style->strokeColor = Color::fromHex( stroke );
-
   const char* stroke_opacity = xml->Attribute( "stroke-opacity" );
-  if( stroke_opacity ) style->strokeColor.a = atof( stroke_opacity );
+  if( stroke ) {
+    style->strokeColor = Color::fromHex( stroke );
+    if( stroke_opacity ) style->strokeColor.a = atof( stroke_opacity );
+  } else {
+    style->strokeColor = Color::Black;
+    style->strokeColor.a = 0;
+  }
+
 
   xml->QueryFloatAttribute( "stroke-width",      &style->strokeWidth );
   xml->QueryFloatAttribute( "stroke-miterlimit", &style->miterLimit  );
