@@ -82,7 +82,7 @@ set(CMU462_DRAWSVG_SOURCE
     texture.cpp
     viewport.cpp
     triangulation.cpp
-#    hardware_renderer.cpp
+    hardware_renderer.cpp
     software_renderer.cpp
     drawsvg.cpp
     main.cpp
@@ -95,22 +95,25 @@ set(CMU462_DRAWSVG_HEADER
     texture.h
     viewport.h
     triangulation.h
-#    hardware_renderer.h
+    hardware_renderer.h
     software_renderer.h
     drawsvg.h
 )
+
+#Import hardware renderer
+include(hardware/hardware.cmake)
 
 # Import drawsvg reference
 include(reference/reference.cmake)
 
 # drawsvg executable
-add_executable( draw_svg
+add_executable( drawsvg
     ${CMU462_DRAWSVG_SOURCE}
     ${CMU462_DRAWSVG_HEADER}
 )
 
 # Link drawsvg executable (static link reference solution)
-target_link_libraries( draw_svg drawsvg_ref
+target_link_libraries( drawsvg drawsvg_ref
     ${FREETYPE_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${CMU462_LIBRARIES}
@@ -120,11 +123,11 @@ target_link_libraries( draw_svg drawsvg_ref
 
 # Frameworks required on osx
 if (APPLE)
-  target_link_libraries(draw_svg  
+  target_link_libraries(drawsvg  
     ${COCOA_LIBRARIES}
     ${IOKIT_LIBRARIES}
     ${COREVIDEO_LIBRARIES}
   )
 endif(APPLE)
 
-install(TARGETS draw_svg DESTINATION .)
+install(TARGETS drawsvg DESTINATION .)

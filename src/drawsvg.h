@@ -5,7 +5,7 @@
 
 #include "CMU462.h"
 #include "svg.h"
-//#include "hardware_renderer.h"
+#include "hardware_renderer.h"
 #include "software_renderer.h"
 
 namespace CMU462 {
@@ -73,8 +73,19 @@ class DrawSVG : public Renderer {
   /**
    * Set a new render method.
    */
-  inline void setRenderMethod( RenderMethod method ) {
-    this->method = method;
+  inline void setRenderMethod( RenderMethod method ) {    
+    
+    this->method = method; 
+    
+    switch (method) {
+      case Hardware:
+        osd = "Hardware Renderer";
+        break;
+      case Software:
+        osd = "Software Renderer";
+        break;
+    }
+
     redraw();
   }
 
@@ -118,7 +129,7 @@ class DrawSVG : public Renderer {
   std::string osd;
 
   /* hardware renderer */
-//  HardwareRasterizer* hardware_renderer;
+  HardwareRenderer* hardware_renderer;
 
   /* software renderer */
   SoftwareRenderer* software_renderer;

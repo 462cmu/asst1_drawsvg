@@ -14,7 +14,7 @@ DrawSVG::~DrawSVG() {
   viewport_imp.clear();
   viewport_ref.clear();
 
-//  delete hardware_renderer;
+  delete hardware_renderer;
 
   delete software_renderer_imp;
   delete software_renderer_ref;
@@ -29,19 +29,18 @@ string DrawSVG::info() {
 
   if (show_diff) return osd;
 
-  switch (method) {
-    case Hardware:
-      osd = "Hardware Renderer";
-      break;
-    case Software:
-      osd = "Software Renderer";
-      if (sample_rate > 1) {
-        osd += " (" + to_string(sample_rate * sample_rate) + "x SSAA)";
-      }
-      if (software_renderer == software_renderer_ref) {
-        osd += " - Reference";
-      }      
-      break;
+  if (method == Hardware) {
+    osd = "Hardware Renderer";
+  }
+
+  if (method == Software) {
+    osd = "Software Renderer ";
+    if (software_renderer == software_renderer_ref) {
+      osd += "- Reference";
+    }
+    if (sample_rate > 1) {
+      osd += "( " + to_string(sample_rate * sample_rate) + "x SSAA)";
+    }
   }
 
   return osd;
@@ -50,7 +49,7 @@ string DrawSVG::info() {
 void DrawSVG::init() {
 
   // hardware renderer
-//  hardware_renderer = new HardwareRenderer();
+  hardware_renderer = new HardwareRenderer();
 
   // software renderer implementations
   software_renderer_imp = new SoftwareRendererImp();
@@ -83,6 +82,10 @@ void DrawSVG::init() {
 
   // set tab and transformation if tabs loaded
   current_tab = 0;
+
+  // initial osd
+  osd = "Software Renderer";
+
 }
 
 void DrawSVG::render() {
@@ -112,7 +115,7 @@ void DrawSVG::resize( size_t width, size_t height ) {
   software_renderer_ref->set_render_target(&framebuffer[0], width, height);
 
   // update hardware renderer
-//  hardware_renderer->resize(width, height);
+  hardware_renderer->resize(width, height);
 
   // re-adjust norm_to_screen
   float scale = min(width, height);
@@ -160,12 +163,12 @@ void DrawSVG::key_event( char key ) {
       break;
 
     // change render method
-//    case 'S':
-//      setRenderMethod( Software );
-//      break;
-//    case 'H':
-//      setRenderMethod( Hardware );
-//      break;
+    case 'S':
+      setRenderMethod( Software ); info();
+      break;
+    case 'H':
+      setRenderMethod( Hardware ); info();
+      break;
 
     // toggle diff
     case 'D':
@@ -251,40 +254,14 @@ void DrawSVG::scroll_event( float offset_x, float offset_y ) {
 
 void DrawSVG::clear( void ) {
 
-  // clear canvas
-  glClearColor(1,1,1,1);
-  glClear(GL_COLOR_BUFFER_BIT);
+  if (method == Hardware ) {
+    hardware_renderer->clear_target();
+  }
 
   if( method == Software ) {
     software_renderer->clear_target();    
   }
 }
-
-
-//void DrawSVG::begin2DDrawing() {
-//  glPushAttrib( GL_VIEWPORT_BIT );
-//  glViewport( 0, 0, width, height );
-//
-//  glMatrixMode( GL_PROJECTION );
-//  glPushMatrix();
-//  glLoadIdentity();
-//  glOrtho( 0, width, 0, height, 0.1, 100.0 );
-//
-//  glMatrixMode( GL_MODELVIEW );
-//  glPushMatrix();
-//  glLoadIdentity();
-//  glTranslated( 0, 0, -1 );
-//}
-//
-//void DrawSVG::leave2DDrawing() {
-//  glPopAttrib();
-//
-//  glMatrixMode( GL_PROJECTION );
-//  glPopMatrix();
-//
-//  glMatrixMode( GL_MODELVIEW );
-//  glPopMatrix();
-//}
 
 void DrawSVG::newTab( SVG* svg ) {
   if (tabs.size() < 9) {
@@ -445,15 +422,21 @@ void DrawSVG::redraw() {
   Matrix3x3 m_ref = norm_to_screen * viewport_ref[current_tab]->get_canvas_to_norm();
   software_renderer_imp->set_canvas_to_screen( m_imp ); 
   software_renderer_ref->set_canvas_to_screen( m_ref ); 
+  hardware_renderer->set_canvas_to_screen( m_ref );
 
-  if (show_diff) {
-    draw_diff();
-    return;
-  }
+  switch (method) {
 
-  if (method == Software) {
-    software_renderer->draw_svg(*tabs[current_tab]);
-    display_pixels( &framebuffer[0] );
+    case Hardware:  
+      hardware_renderer->draw_svg(*tabs[current_tab]);
+      break;
+      
+    case Software: 
+
+      if (show_diff) { draw_diff(); return; }
+      software_renderer->draw_svg(*tabs[current_tab]);
+      display_pixels( &framebuffer[0] );
+      break;
+
   }
 }
 
@@ -482,8 +465,6 @@ void DrawSVG::auto_adjust(size_t tab_index) {
 
 
 void DrawSVG::display_pixels( const unsigned char* pixels ) const {
-
-  // flip
 
   // copy pixels to the screen
   glPushAttrib( GL_VIEWPORT_BIT );
