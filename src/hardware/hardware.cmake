@@ -17,9 +17,9 @@ if(DRAWSVG_BUILD_HARDWARE_RENDERER)
 
   # output name
   if (UNIX)
-    set_target_properties(drawsvg_hdwr PROPERTIES OUTPUT_NAME drawsvg_hdwr)
+    set_target_properties(drawsvg_hdwr PROPERTIES OUTPUT_NAME drawsvghdwr)
     if(APPLE)
-      set_target_properties(drawsvg_hdwr PROPERTIES OUTPUT_NAME drawsvg_hdwr_osx)
+      set_target_properties(drawsvg_hdwr PROPERTIES OUTPUT_NAME drawsvghdwr_osx)
     endif(APPLE)
   endif(UNIX)
   install(TARGETS drawsvg_hdwr DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/hardware)

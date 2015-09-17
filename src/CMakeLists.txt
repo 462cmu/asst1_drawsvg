@@ -82,7 +82,7 @@ set(CMU462_DRAWSVG_SOURCE
     texture.cpp
     viewport.cpp
     triangulation.cpp
-    hardware_renderer.cpp
+#    hardware_renderer.cpp
     software_renderer.cpp
     drawsvg.cpp
     main.cpp
@@ -100,7 +100,7 @@ set(CMU462_DRAWSVG_HEADER
     drawsvg.h
 )
 
-#Import hardware renderer
+# Import hardware renderer
 include(hardware/hardware.cmake)
 
 # Import drawsvg reference
@@ -113,7 +113,7 @@ add_executable( drawsvg
 )
 
 # Link drawsvg executable (static link reference solution)
-target_link_libraries( drawsvg drawsvg_ref
+target_link_libraries( drawsvg drawsvg_hdwr drawsvg_ref
     ${FREETYPE_LIBRARIES}
     ${OPENGL_LIBRARIES}
     ${CMU462_LIBRARIES}
