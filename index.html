@@ -237,7 +237,7 @@ if ( sy &lt; 0 || sy &gt; target_h ) return;
 
 <p>In this task you will add line drawing functionality by implementing the function <code>rasterize_line()</code> in <i> </i><em>software_renderer.cpp</em>. </p>
 
-<p>In Lecture 1, we discussed a few ways to think about rasterizing a line. (Recall we talked about possible rules for what samples are considered to be "covered" by the line, and we discussed algorithms for efficiently determining what samples meet that criteria.  Since line drawing is very well documented on the web (and this is just a warm up exercise), you may consult the web and use any algorithm you wish. However, your solution should:</p>
+<p>In Lecture 2, we discussed a few ways to think about rasterizing a line. (Recall we talked about possible rules for what samples are considered to be "covered" by the line, and we discussed algorithms for efficiently determining what samples meet that criteria.  Since line drawing is very well documented on the web (and this is just a warm up exercise), you may consult the web and use any algorithm you wish. However, your solution should:</p>
 
 <ul>
 <li>Handle non-integer vertex coordinates passed to <code>rasterize_line()</code>.</li>
@@ -265,7 +265,7 @@ if ( sy &lt; 0 || sy &gt; target_h ) return;
 <p>Your implementation should:</p>
 
 <ul>
-<li><p>Sample triangle coverage using the methods discussed in Lecture 2. While in Task 1 you were given choice in how you defined the outputs of line drawing, there is an exact solution to the problem of sampling triangle coverage.  The position of screen sample points--at half-integer coordinates in screen space--was described above.</p></li>
+<li><p>Sample triangle coverage using the methods discussed in Lecture 3. While in Task 1 you were given choice in how you defined the outputs of line drawing, there is an exact solution to the problem of sampling triangle coverage.  The position of screen sample points--at half-integer coordinates in screen space--was described above.</p></li>
 <li><p>To receive full credit in Task 2 your implementation should assume that a sample point on a triangle edge is covered by the triangle.   Your implementation <strong>DOES NOT</strong> need to respect the triangle "edge rules" to avoid "double counting" as discussed in class.  (but we encourage you to try!)</p></li>
 <li><p>Your implementation should use an algorithm that is more work efficient than simply testing all samples on screen.  To receive full credit it should at least constrain coverage tests to samples that lie within a screen-space bounding box of the triangle.  However, we encourage exploration of even more efficient implementations, such as ones that employ "early out" optimizations discussed in lecture.</p></li>
 <li><p>When a triangle covers a sample, you should write the triangle's color to the location corresponding to this sample in <code>render_target</code>.</p></li>
@@ -284,7 +284,7 @@ if ( sy &lt; 0 || sy &gt; target_h ) return;
 <h4>
 <a id="task-3-anti-aliasing-using-supersampling" class="anchor" href="#task-3-anti-aliasing-using-supersampling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 3: Anti-Aliasing Using Supersampling</h4>
 
-<p><strong>This part of the assignment requires only knowledge of concepts from Lectures 1 and 2.</strong></p>
+<p><strong>This part of the assignment requires only knowledge of concepts from Lectures 1, 2, and 3.</strong></p>
 
 <p>In this task, you will extend your rasterizer to anti-alias triangle edges via supersampling.  In response to the user changing the screen sampling rate (the <kbd>=</kbd> and <kbd>-</kbd> keys), the application will call <code>set_sample_rate()</code> .  The parameter <code>sample_rate</code> defines the sampling rate in each dimension, so a value of 2 would correspond to a sample density of 4 samples per pixel.  In this case, the samples lying within the top-left pixel of the screen would be located at locations (0.25, 0.25), (0.75, 0.25), (0.25, 0.75), and (0.75, 0.75).  </p>
 
@@ -317,9 +317,9 @@ Note that the function <code>SoftwareRendererImp::resolve()</code> is called by 
 <h5>
 <a id="part-1-modeling-transforms" class="anchor" href="#part-1-modeling-transforms" aria-hidden="true"><span class="octicon octicon-link"></span></a>Part 1: Modeling Transforms</h5>
 
-<p><strong>This part of the assignment assumes knowledge of concepts in Lecture 3.</strong></p>
+<p><strong>This part of the assignment assumes knowledge of concepts in Lecture 4.</strong></p>
 
-<p>In Lecture 3 we discussed how it is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.  </p>
+<p>In Lecture 3 and Lecture 4 we discussed how it is common (and often very useful) to describe objects and shapes in their own local coordinate spaces and then build up more complicated objects by positioning many individual components in a single coordinate space. In this task you will extend the renderer to properly interpret the hierarchy of modeling transforms expressed in SVG files.  </p>
 
 <p>Recall that an SVG object consists of a hierarchy of shape elements.  Each element in an SVG is associated with a modeling transform (see <code>SVGElement.transform</code> in <i> </i><em>svg.h</em>) that defines the relationship between the object's local coordinate space and the parent element's coordinate space.  At present, the implementation of <code>draw_element()</code> ignores these modeling transforms, so the only SVG objects your renderer has been able to correctly draw were objects that contained only identity modeling transforms. </p>
 
@@ -341,7 +341,7 @@ Note that the function <code>SoftwareRendererImp::resolve()</code> is called by 
 <h4>
 <a id="task-5-drawing-scaled-images" class="anchor" href="#task-5-drawing-scaled-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 5: Drawing Scaled Images</h4>
 
-<p><strong>This part of the assignment requires knowledge of concepts in Lecture 4.</strong></p>
+<p><strong>This part of the assignment requires knowledge of concepts in Lecture 5.</strong></p>
 
 <p>In this task, you will implement <code>rasterize_image()</code> in <i> </i><em>software_renderer.cpp</em>. </p>
 
@@ -360,7 +360,7 @@ Note that the function <code>SoftwareRendererImp::resolve()</code> is called by 
 <h4>
 <a id="task-6-anti-aliasing-image-elements-using-trilinear-filtering" class="anchor" href="#task-6-anti-aliasing-image-elements-using-trilinear-filtering" aria-hidden="true"><span class="octicon octicon-link"></span></a>Task 6: Anti-Aliasing Image Elements Using Trilinear Filtering</h4>
 
-<p><strong>This part of the assignment requires knowledge of concepts in Lecture 4.</strong></p>
+<p><strong>This part of the assignment requires knowledge of concepts in Lecture 5.</strong></p>
 
 <p>In this task you will improve your anti-aliasing of image elements by adding trilinear filtering.  This will involve generating mipmaps for image elements at SVG load time and then modifying your sampling code from Task 5 to implement trilinear filtering using the mipmap.  Your implementation is only required to work for images that have power-of-two dimensions in each direction.</p>
 
@@ -425,7 +425,7 @@ Note that the function <code>SoftwareRendererImp::resolve()</code> is called by 
 
 <p>Your handin directory is on AFS under:</p>
 
-<pre><code>/afs/cs/academic/class/15462-f15-users/ANDREWID/asst1/
+<pre><code>/afs/cs/academic/class/15462-s16-users/ANDREWID/asst1/ or /afs/cs/academic/class/15662-s16-users/ANDREWID/asst1/
 </code></pre>
 
 <p>Note that you may need to create the <code>asst1</code> directory yourself. All your files should be placed there. Please make sure you have a directory and are able to write to it well before the deadline; we are not responsible if you wait until 10 minutes before the deadline and run into trouble. Also, you may need to run <code>aklog cs.cmu.edu</code> after you login in order to read from/write to your submission directory.</p>
@@ -470,7 +470,7 @@ Note that the function <code>SoftwareRendererImp::resolve()</code> is called by 
 <ul>
 <li><p><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/cc627092(v=vs.85).aspx">Rasterization Rules in Direct3D 11</a></p></li>
 <li><p><a href="https://www.opengl.org/registry/doc/glspec40.core.20100311.pdf#page=156">Rasterization in OpenGL 4.0</a></p></li>
-<li><p><a href="https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf">Bryce's C++ Programming Guide</a></p></li>
+<li><p><a href="https://github.com/Bryce-Summers/Writings/blob/master/Programming%20Guides/C_plus_plus_guide.pdf">Bryce Summer's C++ Programming Guide</a></p></li>
 </ul>
 
       <footer class="site-footer">
