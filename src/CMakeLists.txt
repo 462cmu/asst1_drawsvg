@@ -14,19 +14,19 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
   # UNIX
   if(UNIX)
     set(GCC_CXX_FLAGS "-std=gnu++11 -m64 -O3 -funroll-loops")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -fopenmp")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXi")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXxf86vm")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXinerama") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXcursor") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXfixes") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXrandr") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXext")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXrender") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lX11")
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lpthread") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lxcb") 
-    set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXau") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -fopenmp")
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXi")
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXxf86vm")
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXinerama") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXcursor") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXfixes") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXrandr") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXext")
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXrender") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lX11")
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lpthread") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lxcb") 
+    #set(GCC_CXX_FLAGS "${GCC_CXX_FLAGS} -lXau")  
   endif(UNIX)
 
   # Windows
@@ -121,6 +121,29 @@ target_link_libraries( drawsvg drawsvg_hdwr drawsvg_ref
     ${GLFW_LIBRARIES}
 )
 
+if (UNIX)
+target_link_libraries( drawsvg drawsvg_hdwr drawsvg_ref
+    ${CMU462_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${GLFW_LIBRARIES}
+    ${FREETYPE_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    -fopenmp 
+    -lXi 
+    -lXxf86vm 
+    -lXinerama 
+    -lXcursor 
+    -lXfixes 
+    -lXrandr 
+    -lXext 
+    -lXrender 
+    -lX11 
+    -lpthread 
+    -lxcb 
+    -lXau
+)
+endif(UNIX)
+
 # Frameworks required on osx
 if (APPLE)
   target_link_libraries(drawsvg  
@@ -131,3 +154,4 @@ if (APPLE)
 endif(APPLE)
 
 install(TARGETS drawsvg DESTINATION .)
+
